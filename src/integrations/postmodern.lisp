@@ -4,7 +4,9 @@
 
 (in-package :factory-alien/postmodern)
 
-(defmethod factory-alien:build :around (factory &rest args)
+(defmethod factory-alien:build :around (factory traits &rest args)
+  (declare (ignore factory traits args))
   (let ((dao (call-next-method)))
-    (pomo:save-dao dao)
+    (when (typep (class-of dao) 'pomo:dao-class)
+      (pomo:insert-dao dao))
     dao))
