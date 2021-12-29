@@ -3,15 +3,14 @@
 (defsystem factory-alien
   :description "Describe factory-alien here"
   :author "Matt Novenstern <fisxoj@gmail.com>"
-  :license  "Specify license here"
+  :license  "MIT"
   :version "0.0.1"
-  :depends-on ("access"
-               "alexandria"
+  :depends-on ("alexandria"
                "closer-mop")
   :pathname "src"
   :components ((:file "sequences")
-               (:file "factories")
                (:file "traits")
+               (:file "factories")
                (:file "factory-alien"))
   :homepage "https://fisxoj.github.io/factory-alien/"
   :in-order-to ((test-op (test-op factory-alien/test)))

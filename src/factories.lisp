@@ -52,25 +52,31 @@
                        :documentation "The class to make an instance of."))
   (:documentation "Singleton class for each factory that holds things like the sequences used to create the instances of the class that the factory is a proxy for."))
 
-(defun build (factory traits &rest initargs)
-  (let* ((factory (find-factory factory))
-         (parent-traits (mapcar (alexandria:compose #'get-default-trait #'find-factory) (parent-factories factory))))
-    (loop :with object := (make-instance (instantiable-class factory))
-          :for (name . value) :in (traits:collect-slot-values (append parent-traits (traits factory)) traits initargs)
-          :do (setf (slot-value factory object name) value)
-          :finally (return object))))
+(defgeneric build (factory traits &rest initargs)
+  (:method (factory traits &rest initargs)
+    (let* ((factory (find-factory factory))
+           (parent-traits (mapcar (alexandria:compose #'get-default-trait #'find-factory) (parent-factories factory))))
+      (loop :with object := (make-instance (instantiable-class factory))
+            :for (name . value) :in (traits:collect-slot-values (append parent-traits (traits factory)) traits initargs)
+            ;; FIXME: Hack to get the ids out of sub-objects, probably created with a :factory
+            :when (and (str:ends-with-p "-ID" (string name))
+                       (closer-mop:subclassp (class-of value) 'standard-object))
+              :do (setf value (slot-value value :id))
+
+            :do (setf (slot-value object name) value)
+            :finally (return object)))))
 
 (defun get-default-trait (factory)
   (assoc t (traits factory)))
 
-(defun slot-value (factory object name)
-  (let ((slot (find name (closer-mop:class-slots (find-class (instantiable-class factory)))
+(defun slot-value (object name)
+  (let ((slot (find name (closer-mop:class-slots (class-of object))
                     :key #'closer-mop:slot-definition-name
                     :test #'string-equal)))
     (cl:slot-value object (closer-mop:slot-definition-name slot))))
 
-(defun (setf slot-value) (value factory object name)
-  (let ((slot (find name (closer-mop:class-slots (find-class (instantiable-class factory)))
+(defun (setf slot-value) (value object name)
+  (let ((slot (find name (closer-mop:class-slots (class-of object))
                     :key #'closer-mop:slot-definition-name
                     :test #'string-equal)))
     (setf (cl:slot-value object (closer-mop:slot-definition-name slot)) value)))
