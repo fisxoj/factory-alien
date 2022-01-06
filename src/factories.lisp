@@ -50,7 +50,7 @@
    (instantiable-class :initarg :instantiable-class
                        :reader instantiable-class
                        :documentation "The class to make an instance of."))
-  (:documentation "Singleton class for each factory that holds things like the sequences used to create the instances of the class that the factory is a proxy for."))
+  (:documentation "A factory that holds things like the traits defined for the factory, the classes factories it's related to, and the class to build."))
 
 (defgeneric build (factory traits &rest initargs)
   (:method (factory traits &rest initargs)
