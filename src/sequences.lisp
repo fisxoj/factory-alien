@@ -12,15 +12,10 @@
 (in-package :factory-alien.sequences)
 
 (defvar *sequence-state* (make-hash-table)
-  "The counters for every sequence as a mapping of symbol to an instance of :class:`sequence`.  Named sequences are stored as their keyword symbol, anonymous sequences are given a name by :function:`name-sequence`.")
+  "The counters for every sequence as a mapping of symbol to an instance of :class:`sequence`.  Named sequences are stored as their keyword symbol, anonymous sequences are given a numbered name by :function:`make-anonymous-sequence`.")
 
 (defvar *anonymous-sequence-counter* 0
   "Like :variable:`*gensym-counter*`, gets used to generate unique names for anonymous sequences.")
-
-(defun name-sequence (class slot)
-  (alexandria:make-keyword (format nil "~a--~a"
-                                   (class-name class)
-                                   slot)))
 
 (defun reset-sequences ()
   (loop :for key :being :the :hash-key :in *sequence-state*
