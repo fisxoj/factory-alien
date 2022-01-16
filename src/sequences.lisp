@@ -11,7 +11,7 @@
 
 (in-package :factory-alien.sequences)
 
-(defvar *sequence-state* (make-hash-table)
+(defvar *sequence-state* (make-hash-table :test 'equal)
   "The counters for every sequence as a mapping of symbol to an instance of :class:`sequence`.  Named sequences are stored as their keyword symbol, anonymous sequences are given a numbered name by :function:`make-anonymous-sequence`.")
 
 (defvar *anonymous-sequence-counter* 0
@@ -33,7 +33,7 @@
 
 (defun make-anonymous-sequence (funcallable &key (initial-value 0))
   "Takes a function of one argument and returns the name of the sequence that calls that function."
-  (let ((name (make-symbol (format nil "SEQUENCE~d" (incf *anonymous-sequence-counter*)))))
+  (let ((name (alexandria:make-keyword (format nil "SEQUENCE~d" (incf *anonymous-sequence-counter*)))))
     (setf (gethash name *sequence-state*)
           (make-sequence :initial-value initial-value
                          :value initial-value
