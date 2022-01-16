@@ -1,7 +1,7 @@
 ;;;; factory-alien.asd
 
 (defsystem factory-alien
-  :description "Describe factory-alien here"
+  :description "Factory alien is a library for generating fixture data for testing applications."
   :author "Matt Novenstern <fisxoj@gmail.com>"
   :license  "MIT"
   :version "0.0.2"
