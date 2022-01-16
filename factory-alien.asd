@@ -26,7 +26,8 @@
   :perform (test-op (op c)
                     (declare (ignore op))
                     (uiop:symbol-call :parachute :test
-                                      '(:factory-alien/test.factories))))
+                                      '(:factory-alien/test
+                                        :factory-alien/test.factories))))
 
 (defsystem factory-alien/postmodern
   :depends-on ("factory-alien"
