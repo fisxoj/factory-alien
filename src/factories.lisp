@@ -11,6 +11,13 @@
 (defparameter *factories* (make-hash-table)
   "A map of factory names (as keywords) to instances of :class:`factory`.")
 
+;; This replaces the only dependency on str in the system.
+
+(defun id-field-p (name)
+  (let ((length (length name)))
+    (and (> length 3)
+         (string= name "-ID" :start1 (- length 3)))))
+
 (define-condition no-such-factory ()
   ((factory-name :initarg :factory-name))
   (:report (lambda (condition stream)
@@ -59,7 +66,7 @@
       (loop :with object := (make-instance (instantiable-class factory))
             :for (name . value) :in (traits:collect-slot-values (append parent-traits (traits factory)) traits initargs)
             ;; FIXME: Hack to get the ids out of sub-objects, probably created with a :factory
-            :when (and (str:ends-with-p "-ID" (string name))
+            :when (and (id-field-p (string name))
                        (closer-mop:subclassp (class-of value) 'standard-object))
               :do (setf value (slot-value value :id))
 
