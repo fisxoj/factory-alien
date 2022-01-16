@@ -21,10 +21,12 @@
   :depends-on ("factory-alien"
                "parachute")
   :pathname "t"
-  :components ((:file "factory-alien"))
+  :components ((:file "factories")
+               (:file "factory-alien"))
   :perform (test-op (op c)
                     (declare (ignore op))
-                    (uiop:symbol-call :parachute :test c)))
+                    (uiop:symbol-call :parachute :test
+                                      '(:factory-alien/test.factories))))
 
 (defsystem factory-alien/postmodern
   :depends-on ("factory-alien"
