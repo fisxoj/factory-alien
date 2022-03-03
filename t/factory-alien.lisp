@@ -22,8 +22,11 @@
 (define-test whole-shebang
   :serial nil
 
+  (factory-alien.sequences:reset-sequences)
+
   (let ((dog1 (factory-alien:build :dog nil))
-        (dog2 (factory-alien:build :dog '(:spayed))))
+        (dog2 (factory-alien:build :dog '(:spayed)))
+        (dog3 (factory-alien:build :dog nil :name "Reginald")))
 
     (with-slots (name age spayed-p) dog1
       (is string= "Rover" name)
@@ -33,4 +36,8 @@
     (with-slots (name age spayed-p) dog2
       (is string= "Spot" name)
       (is = 2 age)
-      (true spayed-p))))
+      (true spayed-p))
+
+    ;; Check that overrides work
+    (with-slots (name) dog3
+      (is string= "Reginald" name))))

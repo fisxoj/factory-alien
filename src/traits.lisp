@@ -43,7 +43,8 @@
                                   trait-definitions
                                   :key #'car))
            :initial-value (loop :for (name value) :on initargs :by #'cddr
-                                :collecting (cons name (lambda () value))))))
+                                :collecting (list name :initform value))
+           :from-end t)))
 
 (defgeneric make-trait-initializer (type body &rest options)
   (:method (type body &rest options)
