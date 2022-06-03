@@ -4,7 +4,7 @@
   :description "Factory alien is a library for generating fixture data for testing applications."
   :author "Matt Novenstern <fisxoj@gmail.com>"
   :license  "MIT"
-  :version "0.0.2"
+  :version "0.0.3"
   :depends-on ("alexandria"
                "closer-mop")
   :pathname "src"

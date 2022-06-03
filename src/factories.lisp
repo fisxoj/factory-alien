@@ -4,7 +4,8 @@
   (:shadow #:slot-value)
   (:export
    #:find-factory
-   #:slot-value))
+   #:slot-value
+   #:build-many))
 
 (in-package :factory-alien.factories)
 
@@ -72,6 +73,10 @@
 
             :do (setf (slot-value object name) value)
             :finally (return object)))))
+
+(defgeneric build-many (factory n traits &rest initargs)
+  (:method (factory n traits &rest initargs)
+    (loop :repeat n :collecting (apply #'build factory traits initargs))))
 
 (defun get-default-trait (factory)
   (assoc t (traits factory)))
