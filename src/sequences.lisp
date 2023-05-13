@@ -17,6 +17,11 @@
 (defvar *anonymous-sequence-counter* 0
   "Like :variable:`*gensym-counter*`, gets used to generate unique names for anonymous sequences.")
 
+(defstruct sequence
+  (value 0 :type integer)
+  (initial-value 0 :type integer)
+  (funcallable 'identity :type (or symbol function)))
+
 (defun reset-sequences ()
   (loop :for key :being :the :hash-key :in *sequence-state*
         :do (reset-sequence key)))
@@ -25,11 +30,6 @@
   (let ((sequence (gethash name *sequence-state*)))
     (setf (sequence-value sequence)
           (sequence-initial-value sequence))))
-
-(defstruct sequence
-  (value 0 :type integer)
-  (initial-value 0 :type integer)
-  (funcallable 'identity :type (or symbol function)))
 
 (defun make-anonymous-sequence (funcallable &key (initial-value 0))
   "Takes a function of one argument and returns the name of the sequence that calls that function."
